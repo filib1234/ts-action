@@ -4,8 +4,8 @@ import { context, getOctokit } from "@actions/github"
 const decode = (str: string): string => Buffer.from(str, 'base64').toString('binary');
 const encode = (str: string): string => Buffer.from(str, 'binary').toString('base64');
 
-const ghToken = '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'
-const octokit = getOctokit(ghToken)
+const ghToken = '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'
+// const octokit = getOctokit(ghToken)
 type GithubContext = typeof context
 
 // how this config looks?
@@ -78,6 +78,7 @@ function getAllOpenPullRequest(config: Map<string, any>): any {
 }
 
 export function getAllOpenPullRequestWithOctokit(): any {
+    const octokit = getOctokit(ghToken)
     octokit.rest.pulls.list({
         owner: context.repo.owner,
         repo: context.repo.repo,
