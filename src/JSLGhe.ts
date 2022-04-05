@@ -5,29 +5,29 @@ type GithubContext = typeof context
 
 export function getAllOpenPullRequestWithOctokit(ghToken: string): any {
     console.log("get all open pul requests")
-    const octokit = getOctokit(ghToken)
-    octokit.rest.pulls.list({
+    createOctokitClient(ghToken).rest.pulls.list({
         owner: context.repo.owner,
         repo: context.repo.repo,
         state: "open"
-    }).then(a => console.log(a))
+    }).then((a: any) => console.log(a))
 }
 
 export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
     console.log(`write comment to pr - ${prNumber}`)
-    const octokit = getOctokit(ghToken)
-    // octokit.rest.pulls.createReviewComment({
-    //     owner: context.repo.owner,
-    //     repo: context.repo.repo,
-    //     pull_number: prNumber,
-    //     body: message,
-    // })
-    octokit.rest.issues.createComment({
+    createOctokitClient(ghToken).rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
         body: message,
     })
+}
+
+
+
+
+//helper
+function createOctokitClient(ghToken: string): any {
+    return getOctokit(ghToken)
 }
 
 
