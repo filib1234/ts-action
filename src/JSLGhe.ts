@@ -8,6 +8,16 @@ const ghToken = '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'
 // const octokit = getOctokit(ghToken)
 type GithubContext = typeof context
 
+export function getAllOpenPullRequestWithOctokit(): any {
+    const octokit = getOctokit(ghToken, {
+        authStrategy: "token"
+    })
+    octokit.rest.pulls.list({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        state: "open"
+    }).then(a => console.log(a))
+}
 // how this config looks?
 // {
 //     "ghe": {
@@ -77,14 +87,6 @@ function getAllOpenPullRequest(config: Map<string, any>): any {
     return apiCallGet(config, apiEndpoint)
 }
 
-export function getAllOpenPullRequestWithOctokit(): any {
-    const octokit = getOctokit(ghToken)
-    octokit.rest.pulls.list({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        state: "open"
-    }).then(a => console.log(a))
-}
 
 function cleanUpSynchPullRequests(openPullRequests: any, config: Map<string, any>) {
     //todo, what is openPullRequests? check github api, try it out with postman
