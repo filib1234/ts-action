@@ -3,7 +3,7 @@ import { context, getOctokit } from '@actions/github'
 
 type GithubContext = typeof context
 
-export async function getAllOpenPullRequestWithOctokit(ghToken: string): any {
+export async function getAllOpenPullRequestWithOctokit(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
     let titles = await getOctokit(ghToken).rest.pulls.list({
         owner: context.repo.owner,
