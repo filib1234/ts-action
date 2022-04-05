@@ -2,7 +2,7 @@ import { getInput } from "@actions/core"
 import { context, getOctokit } from "@actions/github"
 import { getDiffieHellman } from "crypto"
 import dedent from "dedent"
-import { getAllOpenPullRequestWithOctokit } from "./JSLGhe"
+import { getAllOpenPullRequestWithOctokit, writeCommentToPr } from "./JSLGhe"
 
 type GithubContext = typeof context
 
@@ -18,7 +18,7 @@ function greet(name: string, repoUrl: string) {
 
     getAllOpenPullRequestWithOctokit(ghToken)
 
-
+    writeCommentToPr(ghToken, 1, "test message from octokit")
 
 
 }
