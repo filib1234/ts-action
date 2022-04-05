@@ -1,20 +1,20 @@
 import { get } from 'http'
-import { context, getOctokit } from "@actions/github"
+import { context, getOctokit } from '@actions/github'
 
 type GithubContext = typeof context
 
 export function getAllOpenPullRequestWithOctokit(ghToken: string): any {
-    console.log("get all open pul requests")
-    createOctokitClient(ghToken).rest.pulls.list({
+    console.log('get all open pul requests')
+    getOctokit(ghToken).rest.pulls.list({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        state: "open"
+        state: 'open'
     }).then((a: any) => console.log(a))
 }
 
 export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
     console.log(`write comment to pr - ${prNumber}`)
-    createOctokitClient(ghToken).rest.issues.createComment({
+    getOctokit(ghToken).rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
@@ -22,13 +22,24 @@ export function writeCommentToPr(ghToken: string, prNumber: number, message: str
     })
 }
 
-
-
-
-//helper
-function createOctokitClient(ghToken: string): any {
-    return getOctokit(ghToken)
+export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
+    console.log(`set labels: ${labels} to pr: ${prNumber}`)
+    getOctokit(ghToken).rest.issues.setLabels({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        issue_number: prNumber,
+        labels: labels
+    })
 }
+
+export function validateCommitMessage(ghToken: string, pattern: string) {
+
+}
+
+export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
+
+}
+
 
 
 
@@ -126,17 +137,17 @@ function getAllOpenPullRequest(config: Map<string, any>): any {
 }
 
 
-function cleanUpSynchPullRequests(openPullRequests: any, config: Map<string, any>) {
-    //todo, what is openPullRequests? check github api, try it out with postman
-}
+// function cleanUpSynchPullRequests(openPullRequests: any, config: Map<string, any>) {
+//     //todo, what is openPullRequests? check github api, try it out with postman
+// }
 
-function setLabel(config: Map<string, any>, owner: string, repo: string, labels: string[]): any {
-    let apiEndpoint: string = `/repos/${owner}/${repo}/pulls`
-    let rawBody: string = JSON.stringify({
-        labels: `${labels}`,
-    })
-    return apiCallPost(config, apiEndpoint, rawBody)
-}
+// function setLabel(config: Map<string, any>, owner: string, repo: string, labels: string[]): any {
+//     let apiEndpoint: string = `/repos/${owner}/${repo}/pulls`
+//     let rawBody: string = JSON.stringify({
+//         labels: `${labels}`,
+//     })
+//     return apiCallPost(config, apiEndpoint, rawBody)
+// }
 
 // todo updateCommitStatus? not implemented????
 

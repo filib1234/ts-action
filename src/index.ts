@@ -1,29 +1,22 @@
 import { getInput } from "@actions/core"
-import { context, getOctokit } from "@actions/github"
-import { getDiffieHellman } from "crypto"
-import dedent from "dedent"
-import { getAllOpenPullRequestWithOctokit, writeCommentToPr } from "./JSLGhe"
-
-type GithubContext = typeof context
+import { getAllOpenPullRequestWithOctokit, setLabels, writeCommentToPr } from "./JSLGhe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
 
-greet(inputName, getRepoUrl(context))
+greet(inputName)
 
 
-function greet(name: string, repoUrl: string) {
-    console.log(`'Hello ${name}! ${repoUrl}'`)
+function greet(name: string) {
+    console.log(`'Hello ${name}!'`)
 
 
     getAllOpenPullRequestWithOctokit(ghToken)
 
     writeCommentToPr(ghToken, 1, "test message from octokit")
 
+    setLabels(ghToken, 1, ["test", "octokit", "actions"])
 
 }
 
-function getRepoUrl({ repo, serverUrl }: GithubContext): string {
-    return `${serverUrl}/${repo.owner}/${repo.repo}`
-}
 
