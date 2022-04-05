@@ -1,4 +1,4 @@
-name: "Consonant vowel ratio"
+name: "Asdf"
 author: "Filip Nawrot"
 description: "Custom GH action with TypeScript"
 
@@ -6,7 +6,7 @@ inputs:
   name:
     description: "Name to greet"
     required: false
-    default: "JS Marathon viewers"
+    default: "asd"
   ghToken:
     description: "Github access token"
     required: false

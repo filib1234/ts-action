@@ -2,6 +2,7 @@ import { getInput } from "@actions/core"
 import { context, getOctokit } from "@actions/github"
 import { getDiffieHellman } from "crypto"
 import dedent from "dedent"
+import { getAllOpenPullRequestWithOctokit } from "./JSLGhe"
 
 type GithubContext = typeof context
 
@@ -19,6 +20,7 @@ getDiff().then(files => {
 
 function greet(name: string, repoUrl: string) {
     console.log(`'Hello ${name}! ${repoUrl}'`)
+    getAllOpenPullRequestWithOctokit()
 }
 
 function getRepoUrl({ repo, serverUrl }: GithubContext): string {
@@ -26,17 +28,16 @@ function getRepoUrl({ repo, serverUrl }: GithubContext): string {
 }
 
 async function getDiff() {
-    if (ghToken) {
-        const octokit = getOctokit(ghToken)
-
-        // const result = await octokit.rest.repos.compareCommits({
-        // repo: context.repo.repo,
-        // owner: context.repo.owner,
-        // head: context.payload.pull_request.head.sha,
-        // base: context.payload.pull_request.base.sha,
-        // per_page: 100
-        // })
-        // return result.data.files || []
-    }
+    // if (ghToken) {
+    //     const octokit = getOctokit(ghToken)
+    //     const result = await octokit.rest.repos.compareCommits({
+    //         repo: context.repo.repo,
+    //         owner: context.repo.owner,
+    //         // head: context.payload.pull_request.head.sha,
+    //         // base: context.payload.pull_request.base.sha,
+    //         per_page: 100
+    //     })
+    //     return result.data.files || []
+    // }
     return []
 }
