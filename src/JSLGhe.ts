@@ -16,11 +16,17 @@ export function getAllOpenPullRequestWithOctokit(ghToken: string): any {
 export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
     console.log(`write comment to pr - ${prNumber}`)
     const octokit = getOctokit(ghToken)
-    octokit.rest.pulls.createReviewComment({
+    // octokit.rest.pulls.createReviewComment({
+    //     owner: context.repo.owner,
+    //     repo: context.repo.repo,
+    //     pull_number: prNumber,
+    //     body: message,
+    // })
+    octokit.rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        pull_number: prNumber,
-        body: message
+        issue_number: prNumber,
+        body: message,
     })
 }
 
