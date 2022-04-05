@@ -29,14 +29,14 @@ async function getDiff() {
     if (ghToken) {
         const octokit = getOctokit(ghToken)
 
-        const result = await octokit.rest.repos.compareCommits({
-            repo: context.repo.repo,
-            owner: context.repo.owner,
-            head: context.payload.pull_request.head.sha,
-            base: context.payload.pull_request.base.sha,
-            per_page: 100
-        })
-        return result.data.files || []
+        // const result = await octokit.rest.repos.compareCommits({
+        // repo: context.repo.repo,
+        // owner: context.repo.owner,
+        // head: context.payload.pull_request.head.sha,
+        // base: context.payload.pull_request.base.sha,
+        // per_page: 100
+        // })
+        // return result.data.files || []
     }
     return []
 }
