@@ -1,12 +1,10 @@
 import { get } from 'http'
 import { context, getOctokit } from "@actions/github"
 
-const decode = (str: string): string => Buffer.from(str, 'base64').toString('binary');
-const encode = (str: string): string => Buffer.from(str, 'binary').toString('base64');
-
 type GithubContext = typeof context
 
 export function getAllOpenPullRequestWithOctokit(ghToken: string): any {
+    console.log("get all open pul requests")
     const octokit = getOctokit(ghToken)
     octokit.rest.pulls.list({
         owner: context.repo.owner,
@@ -14,6 +12,44 @@ export function getAllOpenPullRequestWithOctokit(ghToken: string): any {
         state: "open"
     }).then(a => console.log(a))
 }
+
+export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
+    console.log(`write comment to pr - ${prNumber}`)
+    const octokit = getOctokit(ghToken)
+    octokit.rest.pulls.createReviewComment({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        pull_number: prNumber,
+        body: message
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const decode = (str: string): string => Buffer.from(str, 'base64').toString('binary');
+const encode = (str: string): string => Buffer.from(str, 'binary').toString('base64');
+
 // how this config looks?
 // {
 //     "ghe": {
