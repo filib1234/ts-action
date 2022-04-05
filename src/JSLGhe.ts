@@ -5,16 +5,17 @@ type GithubContext = typeof context
 
 export function getAllOpenPullRequestWithOctokit(ghToken: string): any {
     console.log('get all open pul requests')
-    getOctokit(ghToken).rest.pulls.list({
+    let titles = getOctokit(ghToken).rest.pulls.list({
         owner: context.repo.owner,
         repo: context.repo.repo,
         state: 'open'
-    }).then((a: any) => console.log(a))
+    }).then(r => r.data.map(e => e.title))
+    console.log(titles)
 }
 
 export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
     console.log(`write comment to pr - ${prNumber}`)
-    getOctokit(ghToken).rest.issues.createComment({
+    return getOctokit(ghToken).rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
@@ -33,7 +34,7 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
 }
 
 export function validateCommitMessage(ghToken: string, pattern: string) {
-
+    // getAllOpenPullRequestWithOctokit(ghToken).then((resp: { data: any }) => resp.data.map())
 }
 
 export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
