@@ -35,15 +35,14 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]): 
 export async function validateCommitMessages(ghToken: string, pattern: string, prNumber: number) {
     console.log(`validate commit message with pattern: ${pattern}`)
 
-    getOctokit(ghToken).rest.pulls.get({
+    await getOctokit(ghToken).rest.pulls.listCommits({
         owner: context.repo.owner,
         repo: context.repo.repo,
         pull_number: prNumber,
     }).then(e => console.log(e))
 
 
-    let titles = await getAllOpenPullRequestWithOctokit(ghToken)
-        .then(r => r.data.map((e: { title: string }) => e.title))
+    let titles = ["test"]
 
 
     let validCommitMessage: boolean = true
