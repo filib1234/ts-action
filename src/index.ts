@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core"
-import { getAllOpenPullRequestWithOctokit, setLabels, writeCommentToPr } from "./JSLGhe"
+import { getAllOpenPullRequestWithOctokit, setLabels, validateCommitMessage, writeCommentToPr } from "./JSLGhe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
@@ -17,6 +17,7 @@ function greet(name: string) {
 
     setLabels(ghToken, 1, ["test", "octokit", "actions"])
 
+    validateCommitMessage(ghToken, "asd")
 }
 
 
