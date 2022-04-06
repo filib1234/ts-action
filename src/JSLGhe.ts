@@ -12,9 +12,9 @@ export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
     })
 }
 
-export function writeCommentToPr(ghToken: string, prNumber: number, message: string): Promise<any> {
+export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
     console.log(`write comment to pr number: ${prNumber}`)
-    return getOctokit(ghToken).rest.issues.createComment({
+    getOctokit(ghToken).rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
@@ -22,9 +22,9 @@ export function writeCommentToPr(ghToken: string, prNumber: number, message: str
     })
 }
 
-export function setLabels(ghToken: string, prNumber: number, labels: string[]): Promise<any> {
+export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
     console.log(`set labels: ${labels} to pr number: ${prNumber}`)
-    return getOctokit(ghToken).rest.issues.setLabels({
+    getOctokit(ghToken).rest.issues.setLabels({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
@@ -49,16 +49,14 @@ export async function validateCommitMessages(ghToken: string, pattern: string, p
         }
     });
     if (validCommitMessage) {
-        console.log("all commits are valid")
+        console.log('all commits are valid')
     }
     console.log(messages)
 }
-// createPullRequest
-// check default values/ optional parameters
-// undefined if not passed?
-// can we pass it?
+
 export function createPullRequest(ghToken: string, title: string, head: string,
-    base: string, body: string, maintainer?: boolean | undefined, draft?: boolean | undefined) {
+    base: string, body: string, maintainer?: boolean, draft?: boolean) {
+    console.log(`create pull request with title: ${title} from branch: ${head} to: ${base}`)
     getOctokit(ghToken).rest.pulls.create({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -70,16 +68,39 @@ export function createPullRequest(ghToken: string, title: string, head: string,
     })
 }
 
+export function updateCommitStatusError(ghToken: string, commitSha: string, description: string) {
+    updateCommitStatus(ghToken, commitSha, description, 'error')
+}
+
+export function updateCommitStatusPending(ghToken: string, commitSha: string, description: string) {
+    updateCommitStatus(ghToken, commitSha, description, 'pending')
+}
+
+export function updateCommitStatusFailure(ghToken: string, commitSha: string, description: string) {
+    updateCommitStatus(ghToken, commitSha, description, 'failure')
+}
+
+export function updateCommitStatusSuccess(ghToken: string, commitSha: string, description: string) {
+    updateCommitStatus(ghToken, commitSha, description, 'success')
+}
+
+function updateCommitStatus(ghToken: string, commitSha: string, description: string, state: "error" | "failure" | "pending" | "success") {
+    getOctokit(ghToken).rest.repos.createCommitStatus({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        sha: commitSha,
+        state: state,
+        description: description
+    });
+}
+
+
+
 // cleanUpSynchPullRequests
 export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
     getAllOpenPullRequests(ghToken)
 }
 
-// updateCommitStatus
-// updateCommitStatusPending
-// updateCommitStatusError
-// updateCommitStatusFailed
-// updateCommitStatusFinished
 
 
 const decode = (str: string): string => Buffer.from(str, 'base64').toString('binary');
