@@ -32,9 +32,9 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
     })
 }
 
-export function validateCommitMessage(ghToken: string, pattern: string) {
+export async function validateCommitMessage(ghToken: string, pattern: string) {
     console.log(`validate commit message with pattern: ${pattern}`)
-    let titles = getAllOpenPullRequestWithOctokit(ghToken)
+    let titles = await getAllOpenPullRequestWithOctokit(ghToken)
         .then(r => r.data.map((e: { title: string }) => e.title))
     console.log(titles)
 }
