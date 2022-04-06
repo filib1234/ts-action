@@ -35,28 +35,25 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]): 
 export async function validateCommitMessages(ghToken: string, pattern: string, prNumber: number) {
     console.log(`validate commit message with pattern: ${pattern}`)
 
-    await getOctokit(ghToken).rest.pulls.listCommits({
+    let messages: string[] = await getOctokit(ghToken).rest.pulls.listCommits({
         owner: context.repo.owner,
         repo: context.repo.repo,
         pull_number: prNumber,
-    }).then(e => console.log(e))
-
-
-    let titles = ["test"]
+    }).then(r => r.data.map(e => e.commit.message))
 
 
     let validCommitMessage: boolean = true
     let reg = new RegExp(pattern)
-    titles.forEach((title: string) => {
-        if (!reg.test(title)) {
+    messages.forEach((message: string) => {
+        if (!reg.test(message)) {
             validCommitMessage = false
-            console.log(`Title: ${title} does no match pattern: ${pattern}`)
+            console.log(`Title: ${message} does no match pattern: ${pattern}`)
         }
     });
     if (validCommitMessage) {
         console.log("all commits are valid")
     }
-    console.log(titles)
+    console.log(messages)
 }
 
 
