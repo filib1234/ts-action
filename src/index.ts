@@ -9,7 +9,7 @@ greet(inputName)
 
 function greet(name: string) {
     console.log(`'Hello ${name}!'`)
-
+    // diff
     getAllOpenPullRequests(ghToken)
 
     writeCommentToPr(ghToken, 1, "test message from octokit")
