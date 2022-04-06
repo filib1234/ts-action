@@ -1,8 +1,6 @@
 import { get } from 'http'
 import { context, getOctokit } from '@actions/github'
 
-type GithubContext = typeof context
-
 export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
     return await getOctokit(ghToken).rest.pulls.list({
@@ -85,6 +83,7 @@ export function updateCommitStatusSuccess(ghToken: string, commitSha: string, de
 }
 
 function updateCommitStatus(ghToken: string, commitSha: string, description: string, state: "error" | "failure" | "pending" | "success") {
+    console.log(`update status to: ${state} for commit with sha: ${commitSha}`)
     getOctokit(ghToken).rest.repos.createCommitStatus({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -102,14 +101,14 @@ export function cleanUpSynchPullRequests(ghToken: string) {
     }).then(r => r.data.forEach(openPullRequest => {
         let title = openPullRequest.title
         let prNumber = openPullRequest.number
-        if (title.includes("readme")) { // change later to : update from SAVI in
+        if (title.includes("update from SAVI in")) {
             let updatedAt = new Date(openPullRequest.updated_at)
             let dateNow = new Date()
 
             let diff = dateNow.getTime() - updatedAt.getTime()
             let diffInDays = Math.ceil(diff / (1000 * 3600 * 24))
 
-            if (diffInDays > 0) {
+            if (diffInDays > 10) {
                 console.log(`PR with title ${title} will be closed`)
 
                 getOctokit(ghToken).rest.pulls.update({
@@ -122,5 +121,3 @@ export function cleanUpSynchPullRequests(ghToken: string) {
         }
     }))
 }
-
-
