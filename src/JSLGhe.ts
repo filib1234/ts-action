@@ -40,7 +40,7 @@ export async function validateCommitMessages(ghToken: string, pattern: string, p
         pull_number: prNumber,
     }).then(r => r.data.map(e => e.commit.message))
 
-    let validCommitMessage: boolean = true
+    let validCommitMessage = true
     let reg = new RegExp(pattern)
     messages.forEach((message: string) => {
         if (!reg.test(message)) {
@@ -100,26 +100,27 @@ export function cleanUpSynchPullRequests(ghToken: string) {
         repo: context.repo.repo,
         state: 'open'
     }).then(r => r.data.forEach(openPullRequest => {
-        let title: string = openPullRequest.title
+        let title = openPullRequest.title
+        let prNumber = openPullRequest.number
         if (title.includes("readme")) { // change later to : update from SAVI in
-            console.log(`pr matches name ${title}`)
-            let a: string = openPullRequest.updated_at
-            let updatedAt = new Date(a)
-            console.log(`updated at: ${updatedAt}`)
-
+            let updatedAt = new Date(openPullRequest.updated_at)
             let dateNow = new Date()
-            console.log(`dateNow: ${dateNow}`)
+
             let diff = dateNow.getTime() - updatedAt.getTime()
             let diffInDays = Math.ceil(diff / (1000 * 3600 * 24))
-            console.log(`diffindays: ${diffInDays}`)
 
-            if (diffInDays > 10) {
-                console.log("more than 10")
+            if (diffInDays > 0) {
+                console.log(`PR with title ${title} will be closed`)
+
+                getOctokit(ghToken).rest.pulls.update({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: prNumber,
+                    state: 'closed'
+                });
             }
         }
     }))
-
-
 }
 
 
