@@ -5,12 +5,11 @@ type GithubContext = typeof context
 
 export async function getAllOpenPullRequestWithOctokit(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
-    let titles = await getOctokit(ghToken).rest.pulls.list({
+    return await getOctokit(ghToken).rest.pulls.list({
         owner: context.repo.owner,
         repo: context.repo.repo,
         state: 'open'
-    }).then(r => r.data.map(e => e.title))
-    console.log(titles)
+    })
 }
 
 export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
@@ -34,7 +33,10 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
 }
 
 export function validateCommitMessage(ghToken: string, pattern: string) {
-    // getAllOpenPullRequestWithOctokit(ghToken).then((resp: { data: any }) => resp.data.map())
+    console.log(`validate commit message with pattern: ${pattern}`)
+    let titles = getAllOpenPullRequestWithOctokit(ghToken)
+        .then(r => r.data.map((e: { title: string }) => e.title))
+    console.log(titles)
 }
 
 export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
