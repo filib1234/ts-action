@@ -3,7 +3,7 @@ import { context, getOctokit } from '@actions/github'
 
 type GithubContext = typeof context
 
-export async function getAllOpenPullRequestWithOctokit(ghToken: string): Promise<any> {
+export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
     return await getOctokit(ghToken).rest.pulls.list({
         owner: context.repo.owner,
@@ -13,7 +13,7 @@ export async function getAllOpenPullRequestWithOctokit(ghToken: string): Promise
 }
 
 export function writeCommentToPr(ghToken: string, prNumber: number, message: string): Promise<any> {
-    console.log(`write comment to pr - ${prNumber}`)
+    console.log(`write comment to pr number: ${prNumber}`)
     return getOctokit(ghToken).rest.issues.createComment({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -23,7 +23,7 @@ export function writeCommentToPr(ghToken: string, prNumber: number, message: str
 }
 
 export function setLabels(ghToken: string, prNumber: number, labels: string[]): Promise<any> {
-    console.log(`set labels: ${labels} to pr: ${prNumber}`)
+    console.log(`set labels: ${labels} to pr number: ${prNumber}`)
     return getOctokit(ghToken).rest.issues.setLabels({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -34,20 +34,18 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]): 
 
 export async function validateCommitMessages(ghToken: string, pattern: string, prNumber: number) {
     console.log(`validate commit message with pattern: ${pattern}`)
-
     let messages: string[] = await getOctokit(ghToken).rest.pulls.listCommits({
         owner: context.repo.owner,
         repo: context.repo.repo,
         pull_number: prNumber,
     }).then(r => r.data.map(e => e.commit.message))
 
-
     let validCommitMessage: boolean = true
     let reg = new RegExp(pattern)
     messages.forEach((message: string) => {
         if (!reg.test(message)) {
             validCommitMessage = false
-            console.log(`Title: ${message} does no match pattern: ${pattern}`)
+            console.log(`Message: ${message} does no match pattern: ${pattern}`)
         }
     });
     if (validCommitMessage) {
@@ -55,34 +53,32 @@ export async function validateCommitMessages(ghToken: string, pattern: string, p
     }
     console.log(messages)
 }
-
-
-export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
-
+// createPullRequest
+// check default values/ optional parameters
+// undefined if not passed?
+// can we pass it?
+export function createPullRequest(ghToken: string, title: string, head: string,
+    base: string, body: string, maintainer?: boolean | undefined, draft?: boolean | undefined) {
+    getOctokit(ghToken).rest.pulls.create({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        head: head,
+        base: base,
+        maintainer_can_modify: maintainer,
+        draft: draft
+    })
 }
 
+// cleanUpSynchPullRequests
+export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
+    getAllOpenPullRequests(ghToken)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// updateCommitStatus
+// updateCommitStatusPending
+// updateCommitStatusError
+// updateCommitStatusFailed
+// updateCommitStatusFinished
 
 
 const decode = (str: string): string => Buffer.from(str, 'base64').toString('binary');
