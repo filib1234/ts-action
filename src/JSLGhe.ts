@@ -94,15 +94,30 @@ function updateCommitStatus(ghToken: string, commitSha: string, description: str
     });
 }
 
-
-
-// cleanUpSynchPullRequests
 export function cleanUpSynchPullRequests(ghToken: string) {
     getOctokit(ghToken).rest.pulls.list({
         owner: context.repo.owner,
         repo: context.repo.repo,
         state: 'open'
-    }).then(a => console.log(a))
+    }).then(r => r.data.forEach(openPullRequest => {
+        let title: string = openPullRequest.title
+        if (title.includes("readme")) { // change later to : update from SAVI in
+            console.log(`pr matches name ${title}`)
+            let a: string = openPullRequest.updated_at
+            let updatedAt = new Date(a)
+            console.log(`updated at: ${updatedAt}`)
+
+            let dateNow = new Date()
+            console.log(`dateNow: ${dateNow}`)
+            let diff = dateNow.getTime() - updatedAt.getTime()
+            let diffInDays = Math.ceil(diff / (1000 * 3600 * 24))
+            console.log(`diffindays: ${diffInDays}`)
+
+            if (diffInDays > 10) {
+                console.log("more than 10")
+            }
+        }
+    }))
 
 
 }
