@@ -12,7 +12,7 @@ export async function getAllOpenPullRequestWithOctokit(ghToken: string): Promise
     })
 }
 
-export function writeCommentToPr(ghToken: string, prNumber: number, message: string) {
+export function writeCommentToPr(ghToken: string, prNumber: number, message: string): Promise<any> {
     console.log(`write comment to pr - ${prNumber}`)
     return getOctokit(ghToken).rest.issues.createComment({
         owner: context.repo.owner,
@@ -22,9 +22,9 @@ export function writeCommentToPr(ghToken: string, prNumber: number, message: str
     })
 }
 
-export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
+export function setLabels(ghToken: string, prNumber: number, labels: string[]): Promise<any> {
     console.log(`set labels: ${labels} to pr: ${prNumber}`)
-    getOctokit(ghToken).rest.issues.setLabels({
+    return getOctokit(ghToken).rest.issues.setLabels({
         owner: context.repo.owner,
         repo: context.repo.repo,
         issue_number: prNumber,
@@ -32,12 +32,34 @@ export function setLabels(ghToken: string, prNumber: number, labels: string[]) {
     })
 }
 
-export async function validateCommitMessage(ghToken: string, pattern: string) {
+export async function validateCommitMessages(ghToken: string, pattern: string, prNumber: number) {
     console.log(`validate commit message with pattern: ${pattern}`)
+
+    getOctokit(ghToken).rest.pulls.get({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        pull_number: prNumber,
+    }).then(e => console.log(e))
+
+
     let titles = await getAllOpenPullRequestWithOctokit(ghToken)
         .then(r => r.data.map((e: { title: string }) => e.title))
+
+
+    let validCommitMessage: boolean = true
+    let reg = new RegExp(pattern)
+    titles.forEach((title: string) => {
+        if (!reg.test(title)) {
+            validCommitMessage = false
+            console.log(`Title: ${title} does no match pattern: ${pattern}`)
+        }
+    });
+    if (validCommitMessage) {
+        console.log("all commits are valid")
+    }
     console.log(titles)
 }
+
 
 export function cleanUpSynchPullRequests(ghToken: string, pattern: string) {
 
