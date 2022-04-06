@@ -64,6 +64,7 @@ export function createPullRequest(ghToken: string, title: string, head: string,
         repo: context.repo.repo,
         head: head,
         base: base,
+        title: title,
         maintainer_can_modify: maintainer,
         draft: draft
     })
