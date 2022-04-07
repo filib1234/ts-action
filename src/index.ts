@@ -6,7 +6,6 @@ const ghToken: string = getInput("ghToken")
 
 greet(inputName)
 
-//
 function greet(name: string) {
     console.log(`'Hello ${name}!'`)
 
