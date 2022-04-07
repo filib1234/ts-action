@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core"
-import { cleanUpSynchPullRequests, createPullRequest, getAllOpenPullRequests, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./JSLGhe"
+import { cleanUpSynchPullRequests, createPullRequest, getAllOpenPullRequests, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
