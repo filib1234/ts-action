@@ -170,7 +170,6 @@ export async function createBranch(ghToken: string, branch: string) {
     })
 }
 
-// to test
 export async function getAllBranchesNames(ghToken: string): Promise<string[]> {
     return await getOctokit(ghToken).rest.repos.listBranches({
         owner: context.repo.owner,

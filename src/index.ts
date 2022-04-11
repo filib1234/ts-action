@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core"
-import { cleanUpSynchPullRequests, createFile, createPullRequest, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
+import { cleanUpSynchPullRequests, createFile, createPullRequest, deleteBranch, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
@@ -25,7 +25,10 @@ async function greet(name: string) {
 
     // initFlow(ghToken)
 
-    console.log(await getAllBranchesNames(ghToken))
+    // console.log(await getAllBranchesNames(ghToken))
+
+    deleteBranch(ghToken, "develop")
+    deleteBranch(ghToken, "main")
 }
 
 
