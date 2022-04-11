@@ -31,7 +31,7 @@ async function greet(name: string) {
     // deleteBranch(ghToken, "main")
 
     //https://github.com/orbitdb/repo-template
-    cloneRepositoryUsingTemplate(ghToken, "orbitdb", "repo-template", "octokit-template", true)
+    cloneRepositoryUsingTemplate(ghToken, "filib1234", "gojenkins", "octokit-template", true)
 }
 
 
