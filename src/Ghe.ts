@@ -130,16 +130,21 @@ export function cleanUpSynchPullRequests(ghToken: string) {
 
 
 //to test
-export function initFlow(ghToken: string) {
+export async function initFlow(ghToken: string) {
     let content = "\nHello Repo, you are now a git flow project"
     let path = "README.md"
     let message = "init gitflow"
-    createFile(ghToken, "develop", content, path, message)
-    createFile(ghToken, "main", content, path, message)
+    let branches = await getAllBranchesNames(ghToken)
+    createFile(ghToken, branches, "develop", content, path, message)
+    createFile(ghToken, branches, "main", content, path, message)
 }
 
 //ok
-export async function createFile(ghToken: string, branch: string, content: string, path: string, message: string) {
+export async function createFile(ghToken: string, branches: string[], branch: string, content: string, path: string, message: string) {
+    if (!branches.includes(branch)) {
+        createBranch(ghToken, branch)
+    }
+
     await getOctokit(ghToken).rest.repos.createOrUpdateFileContents({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -157,6 +162,16 @@ export async function createFile(ghToken: string, branch: string, content: strin
         }
 
     }).then(d => console.log(d))
+}
+
+export async function createBranch(ghToken: string, branch: string) {
+    console.log(`create branch: ${branch}`)
+    await getOctokit(ghToken).rest.git.createRef({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        sha: context.sha,
+        ref: `heads/${branch}`
+    })
 }
 
 // to test
