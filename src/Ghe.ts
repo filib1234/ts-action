@@ -1,5 +1,4 @@
 import { context, getOctokit } from '@actions/github'
-import { buffer } from 'stream/consumers'
 
 export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
@@ -203,6 +202,7 @@ export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: str
 
 //to test
 export function deleteBranch(ghToken: string, branchName: string) {
+    console.log(`delete branch with name: ${branchName}`)
     getOctokit(ghToken).rest.git.deleteRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
