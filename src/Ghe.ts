@@ -203,10 +203,14 @@ export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: str
 //to test
 export function deleteBranch(ghToken: string, branchName: string) {
     console.log(`delete branch with name: ${branchName}`)
-    getOctokit(ghToken).rest.git.deleteRef({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-        ref: `heads/${branchName}`
-    })
-
+    let branchExists = getAllBranchesNames(ghToken).then(r => r.includes(branchName))
+    if (branchExists) {
+        getOctokit(ghToken).rest.git.deleteRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: `heads/${branchName}`
+        })
+    } else {
+        console.log(`branch: ${branchName} does not exists`)
+    }
 }
