@@ -123,10 +123,7 @@ export function cleanUpSynchPullRequests(ghToken: string) {
 }
 
 
-
-
-
-
+// second file
 
 
 
@@ -144,7 +141,6 @@ export async function createFile(ghToken: string, branches: string[], branch: st
         await createBranch(ghToken, branch)
     }
 
-    Buffer.from(content, 'binary').toString('base64');
     await getOctokit(ghToken).rest.repos.createOrUpdateFileContents({
         owner: context.repo.owner,
         repo: context.repo.repo,
@@ -161,7 +157,7 @@ export async function createFile(ghToken: string, branches: string[], branch: st
             email: "example@example.com"
         }
 
-    }).then(d => console.log(d))
+    })
 }
 
 export async function createBranch(ghToken: string, branch: string) {
