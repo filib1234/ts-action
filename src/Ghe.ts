@@ -142,7 +142,7 @@ export async function initFlow(ghToken: string) {
 //ok
 export async function createFile(ghToken: string, branches: string[], branch: string, content: string, path: string, message: string) {
     if (!branches.includes(branch)) {
-        createBranch(ghToken, branch)
+        await createBranch(ghToken, branch)
     }
 
     await getOctokit(ghToken).rest.repos.createOrUpdateFileContents({
