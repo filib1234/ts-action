@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core"
-import { cleanUpSynchPullRequests, createPullRequest, getAllOpenPullRequests, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
+import { cleanUpSynchPullRequests, createFile, createPullRequest, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
@@ -21,7 +21,9 @@ function greet(name: string) {
 
     // updateCommitStatusError(ghToken, "d93a68fb112e1eeb193aa5be4c81c754b39b6e36", "test-errors")
 
-    cleanUpSynchPullRequests(ghToken)
+    // cleanUpSynchPullRequests(ghToken)
+
+    initFlow(ghToken)
 }
 
 

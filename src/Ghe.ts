@@ -120,3 +120,83 @@ export function cleanUpSynchPullRequests(ghToken: string) {
         }
     }))
 }
+
+
+
+
+
+
+
+
+
+//to test
+export function initFlow(ghToken: string) {
+    let content = "\nHello Repo, you are now a git flow project"
+    let path = "README.md"
+    let message = "init gitflow"
+    createFile(ghToken, "develop", content, path, message)
+    createFile(ghToken, "main", content, path, message)
+}
+
+//ok
+export async function createFile(ghToken: string, branch: string, content: string, path: string, message: string) {
+    await getOctokit(ghToken).rest.repos.createOrUpdateFileContents({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        branch: branch,
+        path: path,
+        message: message,
+        content: content,
+        committer: {
+            name: "Octokit bot",
+            email: "example@example.com"
+        },
+        author: {
+            name: "Octokit bot",
+            email: "example@example.com"
+        }
+
+    }).then(d => console.log(d))
+}
+
+// to test
+export async function getAllBranchesNames(ghToken: string): Promise<string[]> {
+    return await getOctokit(ghToken).rest.repos.listBranches({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+    }).then(resp => resp.data.map(el => el.name));
+}
+
+// todo later
+export async function cleanUpBranches(ghToken: string, branchNamePatterns: string[]) {
+    let branches = await getAllBranchesNames(ghToken)
+
+    branchNamePatterns.forEach(pattern => {
+        branches.forEach(branch => {
+            // if (isBranchNotValid(pattern, branch)) {
+
+            // }
+        });
+    })
+
+}
+
+//to test, read about templates
+export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: string, templateRepo: string, name: string, isPrivate: boolean) {
+    getOctokit(ghToken).rest.repos.createUsingTemplate({
+        template_owner: templateOwner,
+        template_repo: templateRepo,
+        name: name,
+        private: isPrivate
+    });
+}
+
+//to test
+export function deleteBranch(ghToken: string, branchName: string) {
+    getOctokit(ghToken).rest.git.deleteRef({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        ref: `heads/${branchName}`
+    })
+
+}
