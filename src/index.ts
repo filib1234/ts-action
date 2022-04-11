@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core"
-import { cleanUpBranches, cleanUpSynchPullRequests, createFile, createPullRequest, deleteBranch, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
+import { cleanUpBranchesMatchingPattern, cleanUpSynchPullRequests, createFile, createPullRequest, deleteBranch, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
@@ -29,7 +29,7 @@ async function greet(name: string) {
 
     // deleteBranch(ghToken, "develop")
     // deleteBranch(ghToken, "main")
-    cleanUpBranches(ghToken, "asd")
+    cleanUpBranchesMatchingPattern(ghToken, "asd")
 }
 
 

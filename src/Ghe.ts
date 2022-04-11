@@ -191,7 +191,7 @@ export async function deleteBranch(ghToken: string, branchName: string) {
 }
 
 // todo later
-export async function cleanUpBranches(ghToken: string, pattern: string) {
+export async function cleanUpBranchesMatchingPattern(ghToken: string, pattern: string) {
     //change to get upload_at or something similar
     let branches = await getAllBranchesNames(ghToken)
     let reg = new RegExp(pattern)
@@ -199,8 +199,18 @@ export async function cleanUpBranches(ghToken: string, pattern: string) {
         let lastUpdate = await getOctokit(ghToken).request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/${branch}`)
             .then(r => r.data.commit.committer.date)
         console.log(lastUpdate)
-        // if (isBranchNotValid(pattern, branch)) {
+        let updatedAt = new Date(lastUpdate)
+        let dateNow = new Date()
 
+        let diff = dateNow.getTime() - updatedAt.getTime()
+        let diffInDays = Math.ceil(diff / (1000 * 3600 * 24))
+
+        if (branch != 'master') {
+            console.log(`branch name not master: ${branch}`)
+        }
+        // if (diffInDays > 10) {
+        //     console.log(`Branch with name ${branch} will be closed`)
+        //     deleteBranch(ghToken, branch)
         // }
     })
 }
