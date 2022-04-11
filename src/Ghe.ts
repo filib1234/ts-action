@@ -190,9 +190,7 @@ export async function deleteBranch(ghToken: string, branchName: string) {
     }
 }
 
-// todo later
 export async function cleanUpBranchesMatchingPattern(ghToken: string, pattern: string) {
-    //change to get upload_at or something similar
     let branches = await getAllBranchesNames(ghToken)
     let reg = new RegExp(pattern)
     branches.forEach(async branch => {
@@ -205,13 +203,10 @@ export async function cleanUpBranchesMatchingPattern(ghToken: string, pattern: s
         let diff = dateNow.getTime() - updatedAt.getTime()
         let diffInDays = Math.ceil(diff / (1000 * 3600 * 24))
 
-        if (branch != 'master') {
-            console.log(`branch name not master: ${branch}`)
+        if (diffInDays > 10 && branch != 'master') {
+            console.log(`Branch with name ${branch} will be closed`)
+            deleteBranch(ghToken, branch)
         }
-        // if (diffInDays > 10) {
-        //     console.log(`Branch with name ${branch} will be closed`)
-        //     deleteBranch(ghToken, branch)
-        // }
     })
 }
 
