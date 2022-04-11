@@ -196,7 +196,7 @@ export async function cleanUpBranches(ghToken: string, pattern: string) {
     let branches = await getAllBranchesNames(ghToken)
     let reg = new RegExp(pattern)
     branches.forEach(branch => {
-        let lastUpdate = getOctokit(ghToken).request(`GET /repos/{owner}/{repo}/commits/${branch}`)
+        let lastUpdate = getOctokit(ghToken).request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/${branch}`)
             .then(r => r.data.updated_at)
         console.log(lastUpdate)
         // if (isBranchNotValid(pattern, branch)) {
