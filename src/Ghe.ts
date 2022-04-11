@@ -203,7 +203,7 @@ export async function cleanUpBranchesMatchingPattern(ghToken: string, pattern: s
         let diff = dateNow.getTime() - updatedAt.getTime()
         let diffInDays = Math.ceil(diff / (1000 * 3600 * 24))
 
-        if (diffInDays > 10 && branch != 'master') {
+        if (diffInDays > 10 && reg.test(branch)) {
             console.log(`Branch with name ${branch} will be closed`)
             deleteBranch(ghToken, branch)
         }
