@@ -1,4 +1,3 @@
-import { get } from 'http'
 import { context, getOctokit } from '@actions/github'
 
 export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
