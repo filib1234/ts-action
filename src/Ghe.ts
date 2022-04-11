@@ -192,6 +192,10 @@ export async function deleteBranch(ghToken: string, branchName: string) {
 
 //to test, read about templates
 export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: string, templateRepo: string, name: string, isPrivate: boolean) {
+    getOctokit(ghToken).rest.repos.get({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+    }).then(r => console.log(r))
     getOctokit(ghToken).rest.repos.createUsingTemplate({
         template_owner: templateOwner,
         template_repo: templateRepo,
