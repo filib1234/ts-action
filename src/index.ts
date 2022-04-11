@@ -1,5 +1,5 @@
 import { getInput } from "@actions/core"
-import { cleanUpSynchPullRequests, cloneRepositoryUsingTemplate, createFile, createPullRequest, deleteBranch, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
+import { cleanUpBranches, cleanUpSynchPullRequests, createFile, createPullRequest, deleteBranch, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
@@ -29,9 +29,7 @@ async function greet(name: string) {
 
     // deleteBranch(ghToken, "develop")
     // deleteBranch(ghToken, "main")
-
-    //https://github.com/orbitdb/repo-template
-    cloneRepositoryUsingTemplate(ghToken, "filib1234", "gojenkins", "octokit-template", true)
+    cleanUpBranches(ghToken, "asd")
 }
 
 

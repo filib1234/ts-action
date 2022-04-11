@@ -190,32 +190,18 @@ export async function deleteBranch(ghToken: string, branchName: string) {
     }
 }
 
-//to test, read about templates
-export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: string, templateRepo: string, name: string, isPrivate: boolean) {
-    getOctokit(ghToken).rest.repos.get({
-        owner: context.repo.owner,
-        repo: context.repo.repo,
-    }).then(r => console.log(r))
-    getOctokit(ghToken).rest.repos.createUsingTemplate({
-        template_owner: templateOwner,
-        template_repo: templateRepo,
-        owner: context.repo.owner,
-        name: name,
-        private: isPrivate
-    });
-}
-
 // todo later
-export async function cleanUpBranches(ghToken: string, branchNamePatterns: string[]) {
+export async function cleanUpBranches(ghToken: string, pattern: string) {
+    //change to get upload_at or something similar
     let branches = await getAllBranchesNames(ghToken)
+    let reg = new RegExp(pattern)
+    branches.forEach(branch => {
+        let lastUpdate = getOctokit(ghToken).request(`GET /repos/{owner}/{repo}/commits/${branch}`)
+            .then(r => r.data.updated_at)
+        console.log(lastUpdate)
+        // if (isBranchNotValid(pattern, branch)) {
 
-    branchNamePatterns.forEach(pattern => {
-        branches.forEach(branch => {
-            // if (isBranchNotValid(pattern, branch)) {
-
-            // }
-        });
+        // }
     })
-
 }
 
