@@ -176,6 +176,31 @@ export async function getAllBranchesNames(ghToken: string): Promise<string[]> {
     }).then(resp => resp.data.map(el => el.name));
 }
 
+export async function deleteBranch(ghToken: string, branchName: string) {
+    console.log(`delete branch with name: ${branchName}`)
+    let branchExists = await getAllBranchesNames(ghToken).then(r => r.includes(branchName))
+    if (branchExists) {
+        getOctokit(ghToken).rest.git.deleteRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: `heads/${branchName}`
+        })
+    } else {
+        console.log(`branch: ${branchName} does not exists`)
+    }
+}
+
+//to test, read about templates
+export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: string, templateRepo: string, name: string, isPrivate: boolean) {
+    getOctokit(ghToken).rest.repos.createUsingTemplate({
+        template_owner: templateOwner,
+        template_repo: templateRepo,
+        owner: context.repo.owner,
+        name: name,
+        private: isPrivate
+    });
+}
+
 // todo later
 export async function cleanUpBranches(ghToken: string, branchNamePatterns: string[]) {
     let branches = await getAllBranchesNames(ghToken)
@@ -190,27 +215,3 @@ export async function cleanUpBranches(ghToken: string, branchNamePatterns: strin
 
 }
 
-//to test, read about templates
-export function cloneRepositoryUsingTemplate(ghToken: string, templateOwner: string, templateRepo: string, name: string, isPrivate: boolean) {
-    getOctokit(ghToken).rest.repos.createUsingTemplate({
-        template_owner: templateOwner,
-        template_repo: templateRepo,
-        name: name,
-        private: isPrivate
-    });
-}
-
-//to test
-export async function deleteBranch(ghToken: string, branchName: string) {
-    console.log(`delete branch with name: ${branchName}`)
-    let branchExists = await getAllBranchesNames(ghToken).then(r => r.includes(branchName))
-    if (branchExists) {
-        getOctokit(ghToken).rest.git.deleteRef({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: `heads/${branchName}`
-        })
-    } else {
-        console.log(`branch: ${branchName} does not exists`)
-    }
-}
