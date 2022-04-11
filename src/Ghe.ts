@@ -1,4 +1,5 @@
 import { context, getOctokit } from '@actions/github'
+import { buffer } from 'stream/consumers'
 
 export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
@@ -145,13 +146,14 @@ export async function createFile(ghToken: string, branches: string[], branch: st
         await createBranch(ghToken, branch)
     }
 
+    Buffer.from(content, 'binary').toString('base64');
     await getOctokit(ghToken).rest.repos.createOrUpdateFileContents({
         owner: context.repo.owner,
         repo: context.repo.repo,
         branch: branch,
         path: path,
         message: message,
-        content: content,
+        content: Buffer.from(content, 'binary').toString('base64'),
         committer: {
             name: "Octokit bot",
             email: "example@example.com"
