@@ -170,7 +170,7 @@ export async function createBranch(ghToken: string, branch: string) {
         owner: context.repo.owner,
         repo: context.repo.repo,
         sha: context.sha,
-        ref: `heads/${branch}`
+        ref: `refs/heads/${branch}`
     })
 }
 
