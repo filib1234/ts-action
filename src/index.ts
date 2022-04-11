@@ -6,7 +6,7 @@ const ghToken: string = getInput("ghToken")
 
 greet(inputName)
 
-function greet(name: string) {
+async function greet(name: string) {
     console.log(`'Hello ${name}!'`)
 
     // getAllOpenPullRequests(ghToken)
@@ -25,7 +25,7 @@ function greet(name: string) {
 
     // initFlow(ghToken)
 
-    console.log(getAllBranchesNames(ghToken))
+    console.log(await getAllBranchesNames(ghToken))
 }
 
 
