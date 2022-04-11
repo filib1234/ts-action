@@ -130,7 +130,6 @@ export function cleanUpSynchPullRequests(ghToken: string) {
 
 
 
-//to test
 export async function initFlow(ghToken: string) {
     let content = "\nHello Repo, you are now a git flow project"
     let path = "README.md"
@@ -140,7 +139,6 @@ export async function initFlow(ghToken: string) {
     createFile(ghToken, branches, "main", content, path, message)
 }
 
-//ok
 export async function createFile(ghToken: string, branches: string[], branch: string, content: string, path: string, message: string) {
     if (!branches.includes(branch)) {
         await createBranch(ghToken, branch)
