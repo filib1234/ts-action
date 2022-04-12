@@ -42,7 +42,7 @@ jobs:
           echo LS :
           ls
           echo CAT node.xml :
-          cat node.xml
+          cat ./node.xml
           echo CAT config.properties :
-          cat config.properties
+          cat ./config.properties
           echo shell check end
