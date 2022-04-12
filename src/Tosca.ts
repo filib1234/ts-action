@@ -36,7 +36,7 @@ export function createTestEventXml(folderName: string, toscaUniqueId: string) {
                     </TestEvents>
                 </testConfiguration>`
 
-    writeFile("nodex.xml", content, function (err) {
+    writeFile("nodes.xml", content, function (err) {
         if (err) {
             return console.error(err);
         }
