@@ -33,3 +33,10 @@ jobs:
         with:
           name: "This Dot Labs"
           ghToken: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Shell check
+        run: |
+          echo in shell check
+          pwd
+          ls
+          echo shell check end

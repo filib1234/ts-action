@@ -1,5 +1,6 @@
 import { getInput } from "@actions/core"
 import { cleanUpBranchesMatchingPattern, cleanUpSynchPullRequests, createFile, createPullRequest, deleteBranch, getAllBranchesNames, getAllOpenPullRequests, initFlow, setLabels, updateCommitStatusError, validateCommitMessages, writeCommentToPr } from "./Ghe"
+import { createConfigFile, createTestEventXml } from "./Tosca"
 
 const inputName: string = getInput("name")
 const ghToken: string = getInput("ghToken")
@@ -29,7 +30,10 @@ async function greet(name: string) {
 
     // deleteBranch(ghToken, "develop")
     // deleteBranch(ghToken, "main")
-    cleanUpBranchesMatchingPattern(ghToken, "asd")
+    // cleanUpBranchesMatchingPattern(ghToken, "asd")
+
+    createConfigFile("dexUrl", "8080", "toscaWorkspace")
+    createTestEventXml("folderName", "toscaUniqueId")
 }
 
 
