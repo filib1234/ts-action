@@ -1,22 +1,46 @@
 import { writeFile } from "fs";
 import { exec } from "child_process"
 
-// loadPluginJar
-// check ts -> shell execution
-// link as parameter?
-export function testShell() {
-    exec("pwd", (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
+export function downloadJar(ciClientUrl: string) {
+    console.log(`download jar from ${ciClientUrl}`)
+    execInShell(`wget -O ToscaCIJavaClient.jar ${ciClientUrl} --proxy=no`)
+}
+
+// runParallel
+export function runParallel() {
+    // only 1 worker per step, maybe on our own infrastracture it's possible?
+}
+
+// runToscaTestForSpecificEntity
+export function runToscaTestForSpecificEntity(dexUrl: string, aoServicePort: string) {
+
+    let testCases: any[] = [] // read from yaml file latter
+    testCases.forEach(testCase => {
+
+
+        createConfigFile(dexUrl, aoServicePort, testCase.toscaWorkspace)
+        createTestEventXml("", testCase.toscaUniqueId) // where is this 'folderName' param?
+
+        runToscaTestForSingleEntity(testCase.toscaUniqueId)
+
+        let pathToJunitXml: string = testCase.toscaUniqueId + ".xml"
+
+        // Send data to Harold
+        // to be implemented
     })
-    exec("ls", (error, stdout, stderr) => {
+}
+
+
+
+// runToscaDExForSingleEntry
+export function runToscaTestForSingleEntity(toscaUniqueId: string) {
+    execInShell(`export JAVA_TOOL_OPTIONS=
+                java -jar ToscaCIJavaClient.jar -m distributed -c nodes.xml -r ${toscaUniqueId}.xml`)
+}
+
+export function execInShell(command: string) {
+    console.log(`sh command: ${command}`)
+    exec(command, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
@@ -28,14 +52,6 @@ export function testShell() {
         console.log(`stdout: ${stdout}`);
     })
 }
-
-// runParallel -> read about actions infrastucture? can we run parallel jobs?
-// where to download? 
-// link as parameter?
-
-
-// runToscaTestForSpecificEntity
-// runToscaDExForSingleEntry
 
 export function createConfigFile(dexUrl: string, aoServicePort: string, toscaWorkspace: string) {
     let content =
