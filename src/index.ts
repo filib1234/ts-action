@@ -32,7 +32,8 @@ async function greet(name: string) {
     // deleteBranch(ghToken, "main")
     // cleanUpBranchesMatchingPattern(ghToken, "asd")
 
-
+    createConfigFile("dexUrl", "8080", "toscaWorkspace")
+    createTestEventXml("folderName", "toscaUniqueId")
 }
 
 
