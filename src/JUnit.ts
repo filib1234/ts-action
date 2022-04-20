@@ -1,5 +1,6 @@
 import { readFileSync, writeFileSync } from "fs"
 
+// needs tes configuraiton yaml file to test it properly
 export function injectTestsIntoPom(releaseTests: any[]) {
     let data: string = readFileSync("pom.xml").toString()
     let startIncludesBlock = data.indexOf("<includes>\n")
