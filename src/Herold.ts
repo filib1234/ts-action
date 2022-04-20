@@ -14,28 +14,9 @@ function sendResults(contentType: string, pathToResult: string, pathToEnvFile: s
 }
 
 export function writePayload(company: string, fileName: string, testCase: any, branch: string = "develop") {
-    let timestamp = new Date().toLocaleString('en_EU', { timeZone: 'Europe/Paris' });
+    let timestamp: string = new Date().toLocaleString('en_EU', { timeZone: 'Europe/Paris' });
 
-    let payload = '{'
-    payload += '"teststufe": "' + testCase.testStufe + '", ';
-    payload += '"testart": "' + testCase.testUtil + '", ';
-    payload += '"businessArea": "' + testCase.businessArea + '", ';
-    payload += '"tribe": "' + testCase.tribe + '", ';
-    payload += '"team": "' + testCase.team + '", ';
-    payload += '"release": "' + testCase.release + '", ';
-    payload += '"testEnvironment": "' + testCase.environment + '", ';
-    payload += '"branch": "' + branch + '", ';
-    payload += '"company": "' + company + '", ';
-    payload += '"application": "' + testCase.application + '", ';
-    payload += '"testObjectId": "' + testCase.testObjectId + '", ';
-    payload += '"toscaWorkspace": "' + testCase.toscaWorkspace + '", ';
-    payload += '"toscaUniqueId": "' + testCase.toscaUniqueId + '", ';
-    payload += '"soapUiPath": "' + testCase.soapUiPath + '", ';
-    payload += '"jUnitSuitePath": "' + testCase.junitSuite + '", ';
-    payload += '"jiraID": "' + testCase.jiraID + '", ';
-    payload += '"testObjectName": "' + testCase.testObjectName + '", ';
-    payload += '"timestamp": "' + timestamp + '"';
-    payload += '}'
+    let payload = createPayload(testCase, timestamp, branch, company)
 
     if (!fileName.endsWith(".json")) {
         fileName += ".json"
@@ -43,7 +24,6 @@ export function writePayload(company: string, fileName: string, testCase: any, b
 
     writeJson(fileName, payload)
 }
-
 
 export function writeTeamPayload(company: string, fileName: string, testCases: any[], branch: string = "develop") {
     let timestamp = new Date().toLocaleString('en_EU', { timeZone: 'Europe/Paris' });
@@ -66,33 +46,36 @@ export function writeTeamPayload(company: string, fileName: string, testCases: a
         }
     })
 
-
-    let payload = '{'
-    payload += '"teststufe": "' + testCase.testStufe + '", ';
-    payload += '"testart": "' + testCase.testUtil + '", ';
-    payload += '"businessArea": "' + testCase.businessArea + '", ';
-    payload += '"tribe": "' + testCase.tribe + '", ';
-    payload += '"team": "' + testCase.team + '", ';
-    payload += '"release": "' + testCase.release + '", ';
-    payload += '"testEnvironment": "' + testCase.environment + '", ';
-    payload += '"branch": "' + branch + '", ';
-    payload += '"company": "' + company + '", ';
-    payload += '"application": "' + testCase.application + '", ';
-    payload += '"testObjectId": "' + testCase.testObjectId + '", ';
-    payload += '"toscaWorkspace": "' + testCase.toscaWorkspace + '", ';
-    payload += '"toscaUniqueId": "' + testCase.toscaUniqueId + '", ';
-    payload += '"soapUiPath": "' + testCase.soapUiPath + '", ';
-    payload += '"jUnitSuitePath": "' + testCase.junitSuite + '", ';
-    payload += '"jiraID": "' + testCase.jiraID + '", ';
-    payload += '"testObjectName": "' + testCase.testObjectName + '", ';
-    payload += '"timestamp": "' + timestamp + '"';
-    payload += '}'
+    let payload = createPayload(testCase, timestamp, branch, company)
 
     if (!fileName.endsWith(".json")) {
         fileName += ".json"
     }
 
     writeJson(fileName, payload)
+}
+
+function createPayload(testCase: any, timestamp: string, branch: string, company: string): string {
+    return `{
+    "teststufe": "${testCase.testStufe}",
+    "testart": "${testCase.testUtil}",
+    "businessArea": "${testCase.businessArea}",
+    "tribe": "${testCase.tribe}",
+    "team": "${testCase.team}",
+    "release": "${testCase.release}",
+    "testEnvironment": "${testCase.environment}",
+    "branch": "${branch}",
+    "company": "${company}",
+    "application": "${testCase.application}",
+    "testObjectId": "${testCase.testObjectId}",
+    "toscaWorkspace": "${testCase.toscaWorkspace}",
+    "toscaUniqueId": "${testCase.toscaUniqueId}",
+    "soapUiPath": "${testCase.soapUiPath}",
+    "jUnitSuitePath": "${testCase.junitSuite}",
+    "jiraID": "${testCase.jiraID}",
+    "testObjectName": "${testCase.testObjectName}",
+    "timestamp": "${timestamp}",
+    }`
 }
 
 function writeJson(fileName: string, json: string) {
