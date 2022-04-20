@@ -1,19 +1,17 @@
 import { writeFile } from "fs";
-import { exec } from "child_process"
+import { execInShell } from "./ShUtils"
 
 export function downloadJar(ciClientUrl: string) {
     console.log(`download jar from ${ciClientUrl}`)
     execInShell(`wget -O ToscaCIJavaClient.jar ${ciClientUrl} --proxy=no`)
 }
 
-// runParallel
 export function runParallel() {
     // only 1 worker per step, maybe on our own infrastracture it's possible?
 }
 
-// runToscaTestForSpecificEntity
 export function runToscaTestForSpecificEntity(dexUrl: string, aoServicePort: string) {
-
+    //from test file
     let testCases: any[] = [] // read from yaml file latter
     testCases.forEach(testCase => {
 
@@ -30,27 +28,9 @@ export function runToscaTestForSpecificEntity(dexUrl: string, aoServicePort: str
     })
 }
 
-
-
-// runToscaDExForSingleEntry
 export function runToscaTestForSingleEntity(toscaUniqueId: string) {
     execInShell(`export JAVA_TOOL_OPTIONS=
                 java -jar ToscaCIJavaClient.jar -m distributed -c nodes.xml -r ${toscaUniqueId}.xml`)
-}
-
-export function execInShell(command: string) {
-    console.log(`sh command: ${command}`)
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`error: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.log(`stderr: ${stderr}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-    })
 }
 
 export function createConfigFile(dexUrl: string, aoServicePort: string, toscaWorkspace: string) {
