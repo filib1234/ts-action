@@ -1,5 +1,6 @@
 import { context, getOctokit } from '@actions/github'
 
+// ghe file
 export async function getAllOpenPullRequests(ghToken: string): Promise<any> {
     console.log('get all open pull requests')
     return await getOctokit(ghToken).rest.pulls.list({
@@ -121,12 +122,7 @@ export function cleanUpSynchPullRequests(ghToken: string) {
     }))
 }
 
-
-// second file
-//
-//
-
-
+// git file
 export async function initFlow(ghToken: string) {
     let content = "\nHello Repo, you are now a git flow project"
     let path = "README.md"
