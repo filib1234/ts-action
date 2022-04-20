@@ -14,7 +14,6 @@ async function greet(name: string) {
     let test = "asd"
 
     console.log(`variable: "${test}"`)
-    multilineTest()
 }
 
 
