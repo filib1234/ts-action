@@ -2,16 +2,13 @@ import { existsSync, fstat, readFileSync, writeFile, writeFileSync } from 'fs'
 
 // YAML example needed
 
-// selectSpecificValuesFromYAMLToStack same here,
-
-// selectSpecificValuesFromYAMLToList weird
-
+// selectSpecificValuesFromYAMLToStack YAML example needed
+// selectSpecificValuesFromYAMLToList YAML example needed
 // createEvenLists ? needed? only 1 workrer per step
 // createEvenListsWithNodeNames ?? no nodes in github actions
-
-// readConfigurationYaml
-// readFullConfiurationYaml
-// findJunitTestResults ? what does it to?
+// readConfigurationYaml YAML example needed
+// readFullConfiurationYaml YAML example needed
+// findJunitTestResults YAML example needed
 
 export function convertTestTypeId(testTypeId: number): string | undefined {
     switch (testTypeId) {

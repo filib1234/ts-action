@@ -11,7 +11,6 @@ export function runParallel() {
 }
 
 export function runToscaTestForSpecificEntity(dexUrl: string, aoServicePort: string) {
-    //from test file
     let testCases: any[] = [] // read from yaml file latter
     testCases.forEach(testCase => {
 
